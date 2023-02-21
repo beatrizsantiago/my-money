@@ -22,4 +22,14 @@ router.post('/', async (req, res) => {
   }
 })
 
+router.get('/', async (req, res) => {
+  try{
+      const data = await Model.find();
+      res.json(data);
+
+  } catch(error){
+      res.status(500).json({ error: error });
+  }
+})
+
 module.exports = router;
