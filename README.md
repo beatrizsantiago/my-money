@@ -1,12 +1,12 @@
-<h1 align="center">My Money</h1>
+<h1 align="center">MyMoney API</h1>
 
-<h4 align="center">Organize your finances!</h4>
+<h4 align="center">Organize your finances! 💰</h4>
 
-### About
+### ✨ About
 
 Project to explore NodeJs, Express and MongoDB.
 
-### Stacks
+### 📌 Stacks
 
 - [NodeJS](https://nodejs.dev/en/learn/)
 - [Express](https://expressjs.com/)
