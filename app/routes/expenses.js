@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error });
   }
-})
+});
 
 router.get('/', async (req, res) => {
   try{
@@ -48,6 +48,25 @@ router.get('/', async (req, res) => {
   } catch(error){
     res.status(500).json({ error: error });
   }
-})
+});
+
+router.patch('/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updatedData = req.body;
+    const options = {
+      new: true,
+    };
+
+    const result = await ExpensesModel.findByIdAndUpdate(
+      id, updatedData, options
+    );
+
+    res.send(result);
+  }
+  catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
 
 module.exports = router;
