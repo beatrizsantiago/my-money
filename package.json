@@ -1,0 +1,23 @@
+{
+  "name": "my-money",
+  "version": "1.0.0",
+  "description": "Financial organization project",
+  "main": "./app/index.js",
+  "scripts": {
+    "start": "nodemon ./app/index.js",
+    "test": "test"
+  },
+  "keywords": [
+    "nodeJs",
+    "ExpressJs",
+    "MongoDB"
+  ],
+  "author": "Beatriz Santiago",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.9.1",
+    "nodemon": "^2.0.20"
+  }
+}
