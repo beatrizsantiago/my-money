@@ -5,7 +5,8 @@
   "main": "./app/index.js",
   "scripts": {
     "start": "nodemon ./app/index.js",
-    "test": "test"
+    "test": "test",
+    "swagger-autogen": "node ./app/swagger.js"
   },
   "keywords": [
     "nodeJs",
@@ -19,5 +20,9 @@
     "express": "^4.18.2",
     "mongoose": "^6.9.1",
     "nodemon": "^2.0.20"
+  },
+  "devDependencies": {
+    "swagger-autogen": "^2.23.1",
+    "swagger-ui-express": "^4.6.1"
   }
 }

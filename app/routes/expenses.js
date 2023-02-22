@@ -4,6 +4,9 @@ const router = express.Router()
 const ExpensesModel = require('../models/expenses');
 
 router.post('/', async (req, res) => {
+  // #swagger.tags = ['Despesas']
+  // #swagger.summary = 'Criar uma despesa'
+
   try {
     const { name, value, date, description } = req.body;
 
@@ -16,13 +19,16 @@ router.post('/', async (req, res) => {
 
     const newExpense = await data.save();
     res.status(201).json(newExpense);
-    
+
   } catch (error) {
     res.status(400).json({ error: error });
   }
 });
 
 router.get('/', async (req, res) => {
+  // #swagger.tags = ['Despesas']
+  // #swagger.summary = 'Obter as despesas'
+
   try{
     if (!req.query.page) {
       const list = await ExpensesModel.find();
@@ -50,7 +56,10 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.patch('/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {  
+  // #swagger.tags = ['Despesas']
+  // #swagger.summary = 'Alterar uma despesa'
+
   try {
     const id = req.params.id;
     const updatedData = req.body;
@@ -68,10 +77,14 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {  
+  // #swagger.tags = ['Despesas']
+  // #swagger.summary = 'Deletar uma despesa'
+
   try {
     const { id } = req.params;
-    const data = await ExpensesModel.findByIdAndDelete(id);
+    await ExpensesModel.findByIdAndDelete(id);
+
     res.status(200);
   } catch (error) {
     res.status(400).json({ error: error });
