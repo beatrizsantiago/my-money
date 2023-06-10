@@ -42,7 +42,9 @@ router.get('/', async (req: Request, res: Response) => {
 
   try{
     if (req.query) {
-      let { page, limit, search } = req.query;
+      let {
+        page, limit, search, categoryId,
+      } = req.query;
     
       let filter: any = {};
     
@@ -55,6 +57,10 @@ router.get('/', async (req: Request, res: Response) => {
       if (page && limit) {
         const skip = (parseInt(page as string, 10) - 1) * parseInt(limit as string, 10);
         query = query.skip(skip).limit(parseInt(limit as string, 10));
+      }
+
+      if (categoryId) {
+        query.find({ categoryId });
       }
       
       const list = await query.exec();
