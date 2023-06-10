@@ -51,14 +51,14 @@ router.get('/', async (req: Request, res: Response) => {
       }
     
       let query = ExpensesModel.find(filter);
-      const count = ExpensesModel.countDocuments(filter);
-
+      
       if (page && limit) {
         const skip = (parseInt(page as string, 10) - 1) * parseInt(limit as string, 10);
         query = query.skip(skip).limit(parseInt(limit as string, 10));
       }
-    
+      
       const list = await query.exec();
+      const count = await ExpensesModel.countDocuments(filter);
     
       res.json({
         data: list,
