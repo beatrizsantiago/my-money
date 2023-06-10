@@ -92,6 +92,11 @@ router.put('/:id', async (req: Request, res: Response) => {
       new: true,
     };
 
+    const existingCategory = await CategoriesModel.findById(req.body.categoryId);
+    if (!existingCategory) {
+      return res.status(404).json({ error: 'Categoria não encontrada.' });
+    }
+
     const result = await ExpensesModel.findByIdAndUpdate(
       id, updatedData, options
     );
