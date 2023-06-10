@@ -4,19 +4,28 @@ const express = require('express');
 
 const router = express.Router()
 const ExpensesModel = require('../models/expenses');
+const CategoriesModel = require('../models/categories');
 
 router.post('/', async (req: Request, res: Response) => {
   // #swagger.tags = ['Despesas']
   // #swagger.summary = 'Criar uma despesa'
 
   try {
-    const { name, value, date, description } = req.body;
+    const {
+      name, value, date, description, categoryId,
+    } = req.body;
+
+    const existingCategory = await CategoriesModel.findById(categoryId);
+    if (!existingCategory) {
+      return res.status(404).json({ error: 'Categoria não encontrada.' });
+    }
 
     const data = new ExpensesModel({
       name,
       value,
       date,
       description,
+      categoryId,
     });
 
     const newExpense = await data.save();

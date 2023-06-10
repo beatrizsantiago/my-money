@@ -1,22 +1,27 @@
-const mongoose = require('mongoose');
+const mongooseInExpenses = require('mongoose');
 
-const schema = new mongoose.Schema({
+const expensesSchema = new mongooseInExpenses.Schema({
   name: {
     required: true,
-    type: String
+    type: String,
   },
   value: {
     required: true,
-    type: Number
+    type: Number,
   },
   date: {
     required: true,
-    type: Date
+    type: Date,
   },
   description: {
     required: true,
-    type: String
+    type: String,
+  },
+  categoryId: {
+    required: true,
+    type: mongooseInExpenses.Schema.Types.ObjectId,
+    ref: 'Categories',
   }
 }, { versionKey: false })
 
-module.exports = mongoose.model('Expenses', schema);
+module.exports = mongooseInExpenses.model('Expenses', expensesSchema);
