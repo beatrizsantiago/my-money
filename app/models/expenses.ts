@@ -19,4 +19,4 @@ const schema = new mongoose.Schema({
   }
 }, { versionKey: false })
 
-module.exports = mongoose.model('Expenses', schema)
+module.exports = mongoose.model('Expenses', schema);

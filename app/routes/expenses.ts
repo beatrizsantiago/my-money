@@ -1,9 +1,11 @@
+import { Request, Response } from 'express';
+
 const express = require('express');
 
 const router = express.Router()
 const ExpensesModel = require('../models/expenses');
 
-router.post('/', async (req, res) => {
+router.post('/', async (req: Request, res: Response) => {
   // #swagger.tags = ['Despesas']
   // #swagger.summary = 'Criar uma despesa'
 
@@ -25,7 +27,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {
+router.get('/', async (req: Request, res: Response) => {
   // #swagger.tags = ['Despesas']
   // #swagger.summary = 'Obter as despesas'
 
@@ -33,27 +35,26 @@ router.get('/', async (req, res) => {
     if (req.query) {
       let { page, limit, search } = req.query;
     
-      let query = {};
+      let filter: any = {};
     
       if (search) {
-        query.name = { $regex: search, $options: 'i' };
+        filter.name = { $regex: search, $options: 'i' };
       }
     
-      const count = await ExpensesModel.countDocuments(query);
+      let query = ExpensesModel.find(filter);
+      const count = ExpensesModel.countDocuments(filter);
+
+      if (page && limit) {
+        const skip = (parseInt(page as string, 10) - 1) * parseInt(limit as string, 10);
+        query = query.skip(skip).limit(parseInt(limit as string, 10));
+      }
     
-      page = parseInt(page, 10);
-      limit = parseInt(limit, 10);
-    
-      const startIndex = (page - 1) * limit;
-    
-      let list = await ExpensesModel.find(query)
-        .skip(startIndex)
-        .limit(limit);
+      const list = await query.exec();
     
       res.json({
         data: list,
-        totalPages: Math.ceil(count / limit),
-        currentPage: page,
+        totalPages: Math.ceil(count / parseInt(limit as string, 10)),
+        currentPage: parseInt(page as string, 10)
       });
     } else {
       const list = await ExpensesModel.find();
@@ -65,7 +66,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {  
+router.put('/:id', async (req: Request, res: Response) => {  
   // #swagger.tags = ['Despesas']
   // #swagger.summary = 'Alterar uma despesa'
 
@@ -86,7 +87,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {  
+router.delete('/:id', async (req: Request, res: Response) => {  
   // #swagger.tags = ['Despesas']
   // #swagger.summary = 'Deletar uma despesa'
 

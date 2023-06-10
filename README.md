@@ -16,6 +16,7 @@ Project to explore NodeJs, Express and MongoDB.
 - Documentation with [Swagger](https://swagger.io/specification/)
 - IDE: [VSCode](https://code.visualstudio.com/)
 - [MongoDB Compass](https://www.mongodb.com/products/compass)
+- [Typescript](https://www.typescriptlang.org/)
 
 ### 🎯 Getting Started
 

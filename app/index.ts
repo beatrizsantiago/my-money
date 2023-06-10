@@ -1,17 +1,17 @@
 require('dotenv').config();
 
-const express = require('express');
-const mongoose = require('mongoose');
+const expressModule = require('express');
+const mongooseModule = require('mongoose');
 const swaggerUi = require('swagger-ui-express');
 const documentation = require('./swagger_documentation.json')
 
 const routes = require('./routes');
 const mongoString = process.env.DATABASE_URL;
 
-mongoose.connect(mongoString);
-const database = mongoose.connection;
+mongooseModule.connect(mongoString);
+const database = mongooseModule.connection;
 
-database.on('error', (error) => {
+database.on('error', (error: any) => {
   console.log(error);
 });
 
@@ -19,9 +19,9 @@ database.once('connected', () => {
   console.log('Database Connected');
 });
 
-const app = express();
+const app = expressModule();
 
-app.use(express.json());
+app.use(expressModule.json());
 app.use('/api', routes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(documentation));
 
