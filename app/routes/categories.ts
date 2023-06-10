@@ -17,8 +17,8 @@ router.post('/', async (req: Request, res: Response) => {
       description,
     });
 
-    const newExpense = await data.save();
-    res.status(201).json(newExpense);
+    const newCategory = await data.save();
+    res.status(201).json(newCategory);
 
   } catch (error) {
     res.status(400).json({ error: error });
