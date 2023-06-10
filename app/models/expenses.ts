@@ -17,7 +17,7 @@ const expensesSchema = new mongooseInExpenses.Schema({
     required: true,
     type: String,
   },
-  categoryId: {
+  category: {
     required: true,
     type: mongooseInExpenses.Schema.Types.ObjectId,
     ref: 'Categories',

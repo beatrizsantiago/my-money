@@ -15,8 +15,8 @@ router.post('/', async (req: Request, res: Response) => {
       name, value, date, description, categoryId,
     } = req.body;
 
-    const existingCategory = await CategoriesModel.findById(categoryId);
-    if (!existingCategory) {
+    const hasCategory = await CategoriesModel.findById(categoryId);
+    if (!hasCategory) {
       return res.status(404).json({ error: 'Categoria não encontrada.' });
     }
 
@@ -25,7 +25,7 @@ router.post('/', async (req: Request, res: Response) => {
       value,
       date,
       description,
-      categoryId,
+      category: categoryId,
     });
 
     const newExpense = await data.save();
@@ -60,7 +60,7 @@ router.get('/', async (req: Request, res: Response) => {
       }
 
       if (categoryId) {
-        query.find({ categoryId });
+        query.find({ category: categoryId });
       }
       
       const list = await query.exec();
@@ -81,6 +81,19 @@ router.get('/', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/:id', async (req: Request, res: Response) => {
+  // #swagger.tags = ['Despesas']
+  // #swagger.summary = 'Obter uma despesa pelo id'
+
+  try{
+    const expense = await ExpensesModel.findById(req.params.id).populate('category');
+    res.json(expense);   
+
+  } catch(error){
+    res.status(400).json({ error: error });
+  }
+});
+
 router.put('/:id', async (req: Request, res: Response) => {  
   // #swagger.tags = ['Despesas']
   // #swagger.summary = 'Alterar uma despesa'
@@ -92,8 +105,8 @@ router.put('/:id', async (req: Request, res: Response) => {
       new: true,
     };
 
-    const existingCategory = await CategoriesModel.findById(req.body.categoryId);
-    if (!existingCategory) {
+    const hasCategory = await CategoriesModel.findById(req.body.categoryId);
+    if (!hasCategory) {
       return res.status(404).json({ error: 'Categoria não encontrada.' });
     }
 
