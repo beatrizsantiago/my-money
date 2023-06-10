@@ -30,26 +30,35 @@ router.get('/', async (req, res) => {
   // #swagger.summary = 'Obter as despesas'
 
   try{
-    if (!req.query.page) {
+    if (req.query) {
+      let { page, limit, search } = req.query;
+    
+      let query = {};
+    
+      if (search) {
+        query.name = { $regex: search, $options: 'i' };
+      }
+    
+      const count = await ExpensesModel.countDocuments(query);
+    
+      page = parseInt(page, 10);
+      limit = parseInt(limit, 10);
+    
+      const startIndex = (page - 1) * limit;
+    
+      let list = await ExpensesModel.find(query)
+        .skip(startIndex)
+        .limit(limit);
+    
+      res.json({
+        data: list,
+        totalPages: Math.ceil(count / limit),
+        currentPage: page,
+      });
+    } else {
       const list = await ExpensesModel.find();
       res.json(list);
-
-    } else {
-      const { page, limit } = req.query;
-
-      const listWithPagination = await ExpensesModel.find()
-        .limit(limit * 1)
-        .skip((page - 1) * limit)
-        .exec();
-
-      const count = await ExpensesModel.countDocuments();
-
-      res.json({
-        data: listWithPagination,
-        totalPages: Math.ceil(count / limit),
-        currentPage: parseInt(page, 10)
-      });
-    }
+    }    
 
   } catch(error){
     res.status(400).json({ error: error });
