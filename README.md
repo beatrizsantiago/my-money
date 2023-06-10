@@ -17,7 +17,7 @@ Project to explore NodeJs, Express and MongoDB.
 - IDE: [VSCode](https://code.visualstudio.com/)
 - [MongoDB Compass](https://www.mongodb.com/products/compass)
 
-### Getting Started
+### 🎯 Getting Started
 
 Generate the documentation
 
@@ -31,4 +31,4 @@ Start the project
 yarn start
 ```
 
-Open [http://localhost:3000/api-docs/](http://localhost:3000/api-docs/) with your browser to see the doc.
+Open [http://localhost:3001/api-docs/](http://localhost:3001/api-docs/) with your browser to see the doc.
