@@ -100,14 +100,21 @@ router.put('/:id', async (req: Request, res: Response) => {
 
   try {
     const id = req.params.id;
-    const updatedData = req.body;
+    const bodyData = req.body;
     const options = {
       new: true,
     };
 
     const hasCategory = await CategoriesModel.findById(req.body.categoryId);
-    if (!hasCategory) {
+    if (req.body.categoryId && !hasCategory) {
       return res.status(404).json({ error: 'Categoria não encontrada.' });
+    }
+    
+    const expense = await CategoriesModel.findById(id);
+    
+    const updatedData = {
+      ...expense,
+      ...bodyData,
     }
 
     const result = await ExpensesModel.findByIdAndUpdate(
