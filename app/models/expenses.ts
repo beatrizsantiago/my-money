@@ -21,6 +21,10 @@ const expensesSchema = new mongooseInExpenses.Schema({
     required: true,
     type: mongooseInExpenses.Schema.Types.ObjectId,
     ref: 'Categories',
+  },
+  tags: {
+    type: [mongooseInExpenses.Schema.Types.ObjectId],
+    ref: 'Tags',
   }
 }, { versionKey: false })
 

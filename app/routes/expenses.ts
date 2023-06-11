@@ -5,6 +5,7 @@ const express = require('express');
 const router = express.Router()
 const ExpensesModel = require('../models/expenses');
 const CategoriesModel = require('../models/categories');
+const TagsModel = require('../models/tags');
 
 router.post('/', async (req: Request, res: Response) => {
   // #swagger.tags = ['Despesas']
@@ -15,8 +16,8 @@ router.post('/', async (req: Request, res: Response) => {
       name, value, date, description, categoryId,
     } = req.body;
 
-    const hasCategory = await CategoriesModel.findById(categoryId);
-    if (!hasCategory) {
+    const category = await CategoriesModel.findById(categoryId);
+    if (!category) {
       return res.status(404).json({ error: 'Categoria não encontrada.' });
     }
 
@@ -86,7 +87,10 @@ router.get('/:id', async (req: Request, res: Response) => {
   // #swagger.summary = 'Obter uma despesa pelo id'
 
   try{
-    const expense = await ExpensesModel.findById(req.params.id).populate('category');
+    const expense = await ExpensesModel.findById(req.params.id)
+      .populate('category')
+      .populate('tags');
+
     res.json(expense);   
 
   } catch(error){
@@ -105,11 +109,11 @@ router.put('/:id', async (req: Request, res: Response) => {
       new: true,
     };
 
-    const hasCategory = await CategoriesModel.findById(req.body.categoryId);
-    if (req.body.categoryId && !hasCategory) {
+    const category = await CategoriesModel.findById(req.body.categoryId);
+    if (req.body.categoryId && !category) {
       return res.status(404).json({ error: 'Categoria não encontrada.' });
     }
-    
+
     const expense = await CategoriesModel.findById(id);
     
     const updatedData = {
@@ -119,6 +123,74 @@ router.put('/:id', async (req: Request, res: Response) => {
 
     const result = await ExpensesModel.findByIdAndUpdate(
       id, updatedData, options
+    );
+
+    res.send(result);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
+});
+
+router.put('/:expenseId/adicionar-tag/:tagId', async (req: Request, res: Response) => {  
+  // #swagger.tags = ['Despesas']
+  // #swagger.summary = 'Adicionar uma tag a uma despesa'
+
+  try {
+    const { expenseId, tagId } = req.params;
+
+    const expense = await ExpensesModel.findById(expenseId);
+    if (!expense) {
+      return res.status(404).json({ error: 'Despesa não encontrada.' });
+    }
+
+    const tag = await TagsModel.findById(tagId);
+    if (!tag) {
+      return res.status(400).json({ error: 'A tag não existe' });
+    }
+
+    const tagExists = expense.tags.includes(tag._id);
+    if (tagExists) {
+      return res.status(400).json({ error: 'A tag já existe na despesa' });
+    }
+
+    const result = await ExpensesModel.findOneAndUpdate(
+      { _id: expenseId },
+      { $push: { tags: tag._id } },
+      { new: true }
+    );
+
+    res.send(result);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
+});
+
+router.put('/:expenseId/remover-tag/:tagId', async (req: Request, res: Response) => {  
+  // #swagger.tags = ['Despesas']
+  // #swagger.summary = 'Adicionar uma tag a uma despesa'
+
+  try {
+    const { expenseId, tagId } = req.params;
+
+    const expense = await ExpensesModel.findById(expenseId);
+    if (!expense) {
+      return res.status(404).json({ error: 'Despesa não encontrada.' });
+    }
+
+    const tag = await TagsModel.findById(tagId);
+    if (!tag) {
+      return res.status(400).json({ error: 'A tag não existe' });
+    }
+
+    const tagIndex = expense.tags.indexOf(tag._id);
+    if (tagIndex === -1) {
+      return res.status(400).json({ error: 'A tag não existe na despesa' });
+    }
+
+    const result = await ExpensesModel.findOneAndUpdate(
+      { _id: expenseId },
+      { $pull: { tags: tag._id } },
+      { new: true }
     );
 
     res.send(result);
