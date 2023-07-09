@@ -2,8 +2,9 @@ import { Request, Response } from 'express';
 
 const express = require('express');
 
-const router = express.Router()
 const CategoriesModel = require('../models/categories');
+
+const router = express.Router();
 
 router.post('/', async (req: Request, res: Response) => {
   // #swagger.tags = ['Categorias']

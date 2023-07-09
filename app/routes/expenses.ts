@@ -2,10 +2,11 @@ import { Request, Response } from 'express';
 
 const express = require('express');
 
-const router = express.Router()
 const ExpensesModel = require('../models/expenses');
 const CategoriesModel = require('../models/categories');
 const TagsModel = require('../models/tags');
+
+const router = express.Router()
 
 router.post('/', async (req: Request, res: Response) => {
   // #swagger.tags = ['Despesas']
