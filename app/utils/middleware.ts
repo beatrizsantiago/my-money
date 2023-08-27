@@ -18,7 +18,7 @@ const authenticateMiddleware = async (req:Request, res:Response, next:NextFuncti
           next();
 
         } else {
-          res.status(400).json({ error: "Fala na verificação do token" });
+          res.status(400).json({ error: "Falha na verificação do token" });
         }
       } else {
         res.status(400).json({ error: "Header malformado." });
